@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js webgl</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="/resources/modules/webgl/three.js"></script>
+		<script src="/resources/modules/webgl/WebGL.js"></script>
+		<script src="/resources/modules/webgl/stats.min.js"></script>
+		<script src='/resources/modules/webgl/controls/OrbitControls.js'></script>
+		<script src="/resources/modules/webgl/perlin.js"></script>
+		<style>
+			body {
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<script>
+
+			if ( WEBGL.isWebGLAvailable() === false ) {
+				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+			}
+			
+
+		</script>
+
+	</body>
+</html>

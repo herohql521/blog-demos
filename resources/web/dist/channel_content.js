@@ -1,0 +1,1 @@
+define(function(require){require("jquery"),require("base"),require("./common")});

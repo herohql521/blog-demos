@@ -1,0 +1,198 @@
+// out: ./fz.css, compress:true, sourceMap:false
+@gridColumns: 12;           //网格数 <=24
+@gridGutterWidth: 0.01;     //网格间距
+@PadScreen: 1024px;          //Pad临界尺寸
+@PadVScreen: 992px;         //Pad竖屏临界尺寸
+@MobileScreen: 760px;       //Mobile临界尺寸
+
+.row { width: percentage(1+@gridGutterWidth); transition: 0.2s width ease; *zoom: 1;}
+.row:before, .row:after { display: table; clear: both; content: '';}
+.row > [class*="span-"] {float: left; margin-right: percentage(@gridGutterWidth); *margin-right: percentage(@gridGutterWidth) - 0.11%;}
+.row > .span-1 { width: (100 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-2 { width: (200 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-3 { width: (300 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-4 { width: (400 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-5 { width: (500 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-6 { width: (600 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-7 { width: (700 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-8 { width: (800 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-9 { width: (900 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-10 { width: (1000 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-11 { width: (1100 / @gridColumns) - percentage(@gridGutterWidth); }
+.row > .span-12 { width: (1200 / @gridColumns) - percentage(@gridGutterWidth); }
+
+/*
+* 无间距模式
+*/
+.full-row { width: 100%; transition: 0.2s width ease; *zoom: 1;}
+.full-row:before, .full-row:after { display: table; clear: both; content: '';}
+.full-row > [class*='span'] {float: left; }
+.full-row > .span-1 { width: (100 / @gridColumns)+0%; *width: (100 / @gridColumns)- 0.11%;}
+.full-row > .span-2 { width: (200 / @gridColumns)+0%; *width: (200 / @gridColumns)- 0.11%;}
+.full-row > .span-3 { width: (300 / @gridColumns)+0%; *width: (300 / @gridColumns)- 0.11%;}
+.full-row > .span-4 { width: (400 / @gridColumns)+0%; *width: (400 / @gridColumns)- 0.11%;}
+.full-row > .span-5 { width: (500 / @gridColumns)+0%; *width: (500 / @gridColumns)- 0.11%;}
+.full-row > .span-6 { width: (600 / @gridColumns)+0%; *width: (600 / @gridColumns)- 0.11%;}
+.full-row > .span-7 { width: (700 / @gridColumns)+0%; *width: (700 / @gridColumns)- 0.11%;}
+.full-row > .span-8 { width: (800 / @gridColumns)+0%; *width: (800 / @gridColumns)- 0.11%;}
+.full-row > .span-9 { width: (900 / @gridColumns)+0%; *width: (900 / @gridColumns)- 0.11%;}
+.full-row > .span-10 { width: (1000 / @gridColumns)+0%; *width: (1000 / @gridColumns)- 0.11%;}
+.full-row > .span-11 { width: (1100 / @gridColumns)+0%; *width: (1100 / @gridColumns)- 0.11%;}
+.full-row > .span-12 { width: (1200 / @gridColumns)+0%; *width: (1200 / @gridColumns)- 0.11%;}
+/*
+* 工具
+*/
+.row > .pull-right, .full-row > .pull-right { float: right; }
+.row > .center { position: relative; left: percentage(-@gridGutterWidth/2); display: block; float: none; clear: both; margin-right: auto; margin-left: auto;}
+.full-row > .center { display: block; float: none; clear: both; margin-right: auto; margin-left: auto;}
+
+.pull-left-1 { position: relative; left: 0%-100 / @gridColumns;}
+.pull-left-2 { position: relative; left: 0%-200 / @gridColumns;}
+.pull-left-3 { position: relative; left: 0%-300 / @gridColumns;}
+.pull-left-4 { position: relative; left: 0%-400 / @gridColumns;}
+.pull-left-5 { position: relative; left: 0%-500 / @gridColumns;}
+.pull-left-6 { position: relative; left: 0%-600 / @gridColumns;}
+.pull-left-7 { position: relative; left: 0%-700 / @gridColumns;}
+.pull-left-8 { position: relative; left: 0%-800 / @gridColumns;}
+.pull-left-9 { position: relative; left: 0%-900 / @gridColumns;}
+.pull-left-10 { position: relative; left: 0%-1000 / @gridColumns;}
+.pull-left-11 { position: relative; left: 0%-1100 / @gridColumns;}
+.pull-left-12 { position: relative; left: 0%-1200 / @gridColumns;}
+
+.pull-right-1 { position: relative; left: 0%+100 / @gridColumns;}
+.pull-right-2 { position: relative; left: 0%+200 / @gridColumns;}
+.pull-right-3 { position: relative; left: 0%+300 / @gridColumns;}
+.pull-right-4 { position: relative; left: 0%+400 / @gridColumns;}
+.pull-right-5 { position: relative; left: 0%+500 / @gridColumns;}
+.pull-right-6 { position: relative; left: 0%+600 / @gridColumns;}
+.pull-right-7 { position: relative; left: 0%+700 / @gridColumns;}
+.pull-right-8 { position: relative; left: 0%+800 / @gridColumns;}
+.pull-right-9 { position: relative; left: 0%+900 / @gridColumns;}
+.pull-right-10 { position: relative; left: 0%+1000 / @gridColumns;}
+.pull-right-11 { position: relative; left: 0%+1100 / @gridColumns;}
+.pull-right-12 { position: relative; left: 0%+1200 / @gridColumns;}
+
+@media only screen and (max-width: @PadScreen) { 
+/*
+* 中屏
+*/
+.row > .midd-1 { width: (100 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-2 { width: (200 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-3 { width: (300 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-4 { width: (400 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-5 { width: (500 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-6 { width: (600 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-7 { width: (700 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-8 { width: (800 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-9 { width: (900 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-10 { width: (1000 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-11 { width: (1100 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .midd-12 { width: (1200 / @gridColumns) - percentage(@gridGutterWidth);}
+
+/*
+* 工具
+*/
+.midd-hide { display: none;}
+.midd-center { position: relative; left: percentage(-@gridGutterWidth/2); display: block; float: none; clear: both; margin-right: auto; margin-left: auto;}//修复宽度超过100%的居中偏差
+
+/*
+* 无间距模式
+*/
+.full-row > .midd-1 { width: (100 / @gridColumns)+0%;}
+.full-row > .midd-2 { width: (200 / @gridColumns)+0%;}
+.full-row > .midd-3 { width: (300 / @gridColumns)+0%;}
+.full-row > .midd-4 { width: (400 / @gridColumns)+0%;}
+.full-row > .midd-5 { width: (500 / @gridColumns)+0%;}
+.full-row > .midd-6 { width: (600 / @gridColumns)+0%;}
+.full-row > .midd-7 { width: (700 / @gridColumns)+0%;}
+.full-row > .midd-8 { width: (800 / @gridColumns)+0%;}
+.full-row > .midd-9 { width: (900 / @gridColumns)+0%;}
+.full-row > .midd-10 { width: (1000 / @gridColumns)+0%;}
+.full-row > .midd-11 { width: (1100 / @gridColumns)+0%;}
+.full-row > .midd-12 { width: (1200 / @gridColumns)+0%;}
+}
+
+@media only screen and (max-width: @PadVScreen) { 
+    /*
+    * pad竖屏
+    */
+    .row > .smidd-1 { width: (100 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-2 { width: (200 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-3 { width: (300 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-4 { width: (400 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-5 { width: (500 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-6 { width: (600 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-7 { width: (700 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-8 { width: (800 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-9 { width: (900 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-10 { width: (1000 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-11 { width: (1100 / @gridColumns) - percentage(@gridGutterWidth);}
+    .row > .smidd-12 { width: (1200 / @gridColumns) - percentage(@gridGutterWidth);}
+    
+    /*
+    * 工具
+    */
+    .smidd-hide { display: none;}
+    .smidd-center { position: relative; left: percentage(-@gridGutterWidth/2); display: block; float: none; clear: both; margin-right: auto; margin-left: auto;}//修复宽度超过100%的居中偏差
+    
+    /*
+    * 无间距模式
+    */
+    .full-row > .smidd-1 { width: (100 / @gridColumns)+0%;}
+    .full-row > .smidd-2 { width: (200 / @gridColumns)+0%;}
+    .full-row > .smidd-3 { width: (300 / @gridColumns)+0%;}
+    .full-row > .smidd-4 { width: (400 / @gridColumns)+0%;}
+    .full-row > .smidd-5 { width: (500 / @gridColumns)+0%;}
+    .full-row > .smidd-6 { width: (600 / @gridColumns)+0%;}
+    .full-row > .smidd-7 { width: (700 / @gridColumns)+0%;}
+    .full-row > .smidd-8 { width: (800 / @gridColumns)+0%;}
+    .full-row > .smidd-9 { width: (900 / @gridColumns)+0%;}
+    .full-row > .smidd-10 { width: (1000 / @gridColumns)+0%;}
+    .full-row > .smidd-11 { width: (1100 / @gridColumns)+0%;}
+    .full-row > .smidd-12 { width: (1200 / @gridColumns)+0%;}
+    }
+
+
+@media only screen and (max-width: @MobileScreen) { 
+/*
+* 小屏栅格
+*/
+.row > .smal-1 { width: (100 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-2 { width: (200 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-3 { width: (300 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-4 { width: (400 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-5 { width: (500 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-6 { width: (600 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-7 { width: (700 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-8 { width: (800 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-9 { width: (900 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-10 { width: (1000 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-11 { width: (1100 / @gridColumns) - percentage(@gridGutterWidth);}
+.row > .smal-12 { width: (1200 / @gridColumns) - percentage(@gridGutterWidth);}
+/*
+* 工具
+*/
+.smal-hide { display: none;}
+.smal-show { display: block;}
+.smal-center { position: relative; left: percentage(-@gridGutterWidth/2); display: block; float: none; clear: both; margin-right: auto; margin-left: auto;}//修复宽度超过100%的居中偏差
+
+/*
+* 清除位移
+*/
+[class*='pull-left-'], [class*='pull-right-'] { right: auto; left: auto;}
+/*
+* 无间距模式
+*/
+.full-row > .smal-1 { width: (100 / @gridColumns)+0%;}
+.full-row > .smal-2 { width: (200 / @gridColumns)+0%;}
+.full-row > .smal-3 { width: (300 / @gridColumns)+0%;}
+.full-row > .smal-4 { width: (400 / @gridColumns)+0%;}
+.full-row > .smal-5 { width: (500 / @gridColumns)+0%;}
+.full-row > .smal-6 { width: (600 / @gridColumns)+0%;}
+.full-row > .smal-7 { width: (700 / @gridColumns)+0%;}
+.full-row > .smal-8 { width: (800 / @gridColumns)+0%;}
+.full-row > .smal-9 { width: (900 / @gridColumns)+0%;}
+.full-row > .smal-10 { width: (1000 / @gridColumns)+0%;}
+.full-row > .smal-11 { width: (1100 / @gridColumns)+0%;}
+.full-row > .smal-12 { width: (1200 / @gridColumns)+0%;}
+}

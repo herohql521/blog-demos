@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js webgl</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="/resources/modules/webgl/three.js"></script>
+		<script src="/resources/modules/webgl/WebGL.js"></script>
+		<script src="/resources/modules/webgl/stats.min.js"></script>
+		<script src='/resources/modules/webgl/controls/OrbitControls.js'></script>
+		<script src="/resources/modules/webgl/perlin.js"></script>
+		<script src="/resources/modules/webgl/TweenMax.min.js"></script>
+		<style>
+			html,body{width:100%; height:100%;}
+			body {
+				margin: 0px;
+				overflow: hidden;
+				position:relative;
+			}
+			#tunnel{
+			  position: absolute;
+			  top: 0;
+			  left: 0;
+			  width: 100%;
+			  height:100%;
+			}
+			.text_panel{
+				position:absolute;
+				left:0;
+				top:0;
+				width:100%;
+				height:100%;
+				/*background:rgba(0,0,0,.6)*/
+			}
+			.title{
+				position:absolute;
+				top:5%;
+				left:50%;
+				transform:  translateX(-50%); 
+				font-size:46px;
+				color:#fff;
+				text-shadow: 0px 2px 10px #dffff6;
+				user-select:none;
+			}
+			.start{
+				position:absolute;
+				top:80%;
+				left:50%;
+				transform:  translateX(-50%); 
+				width:200px;
+				line-height:60px;
+				font-size:26px;
+				text-align:center;
+				color:#fff;
+				text-shadow: 0px 1px 5px #fff;
+				user-select:none;
+				border:1px solid #fff;
+				transition:all 0.5s ease;
+				cursor:pointer;
+			}
+			.start:hover{box-shadow: 0 1px 30px 2px rgba(255,255,255,0.8);}
+			#leader_line{width:10px; height:10px; border-radius:50%; border:2px solid #fff; position:absolute; left:935px; top:430px; box-shadow: 0 1px 30px 2px rgba(255,255,255,0.8); opacity:0;}
+			#leader_line:after{content:''; width:200px; height:1px; background:#fff; position:absolute; left:10px; top:5px}
+			#data_con{width:380px; padding:30px; box-sizing:border-box; color:#fff; position:absolute; top:50%; left:1152px;  min-height:300px; transform:translateY(-50%); background:rgba(125,125,125,.5); border:1px solid rgba(255,255,255,.5); opacity:0;}
+			#pic{padding:10px 0;}
+			#pic img{width:100%;}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="tunnel"></canvas>
+		<div class="text_panel">
+			<div class="title">寻找·时光碎片</div>
+			<div class="start" id="btn">开始探索</div>
+		</div>
+		<!-- dom -->
+		<div id="dom_con">
+			<div id="leader_line"></div>
+			<div id="data_con">
+				<div id="year">1991</div>
+				<div id="title">Joint Operation</div>
+				<div id="pic"><img src="http://yqjfen.icm.cn/upload/images/2019/01/03/fc689f3aaacd4b84bb112454fff9d7da.jpg" alt=""></div>
+				<div id="desc">
+					FAW Jiefang Dalian Diesel Engine Co., Ltd. is committed to manufacturing reliable products and building a proud company. The company will lead the mainstream market and promote China's independent commercial vehicles brands and construction machinery brands to international markets.
+				</div>
+			</div>
+		</div>
+	<script>
+
+		if ( WEBGL.isWebGLAvailable() === false ) {
+			document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+		}else{
+			//全局变量声明
+			var ww = window.innerWidth,
+			  wh = window.innerHeight;
+			var halfWidth = ww / 2;
+	    	var halfHeight = wh / 2;
+			var play = true;
+			var debrisContainer, debrisLightContainer; //碎片及灯光容器
+			var debrisNums = 5; //碎片数量
+			var resultCoordinate; //碎片v3转v2屏幕的坐标{x:, y:}
+			var path, tubeLight;
+			var distance2Camera = 0.06;
+			//Create a WebGL renderer
+			var renderer = new THREE.WebGLRenderer({
+			  canvas: document.querySelector("#tunnel"),antialias: true
+			});
+			renderer.setSize(ww, wh);
+			//Create an empty scene
+			var scene = new THREE.Scene();
+			scene.fog = new THREE.Fog(0x000000,100,200);
+			//Create a perpsective camera
+			var camera = new THREE.PerspectiveCamera(45, ww / wh, 0.001, 200);
+
+
+
+			init()
+
+		}
+
+		function init(){
+			var historyData = {
+				"year":1992,
+				"title":"Joint Operation",
+				"pics":"http://yqjfen.icm.cn/upload/images/2019/01/03/fc689f3aaacd4b84bb112454fff9d7da.jpg",
+				"desc":"FAW Jiefang Dalian Diesel Engine Co., Ltd. is committed to manufacturing reliable products and building a proud company. The company will lead the mainstream market and promote China's independent commercial vehicles brands and construction machinery brands to international markets."
+			};
+			creatTube();
+			Debris();
+			raycasterCheck();
+		}
+
+		function creatTube(){
+			//Array of points
+			var points = [
+				[68.5,185.5],
+				[1,262.5],
+				[270.9,281.9],
+				[300,212.8],
+				[178,155.7],
+				[240.3,72.3],
+				[153.4,0.6],
+				[52.6,53.3],
+				[68.5,185.5]
+			];
+			//Convert the array of points into vertices
+			for (var i = 0; i < points.length; i++) {
+			  var x = points[i][0];
+			  //We set a random value for the Y axis
+			  var y = (Math.random()-0.5)*250;
+			  var z = points[i][1];
+			  points[i] = new THREE.Vector3(x, y, z);
+			}
+			//Create a path from the points
+			path = new THREE.CatmullRomCurve3(points);
+
+			//Create the tube geometry from the path
+			var geometry = new THREE.TubeGeometry( path, 300, 4, 32, true );
+			//Basic material
+			var material = new THREE.MeshLambertMaterial({
+			  color:0xffffff,
+			  side : THREE.BackSide
+			});
+			//Create a mesh
+			var tube = new THREE.Mesh( geometry, material );
+			//Add tube into the scene
+			scene.add( tube );
+			//Create a point light in our scene
+			tubeLight = new THREE.PointLight(0xffffff,1, 200);
+			scene.add(tubeLight);
+		}
+		
+		function Debris(){
+			this.number = debrisNums;
+			this.debrisContainer= new THREE.Object3D();
+			this.debrisLightContainer= new THREE.Object3D();
+			scene.add(this.debrisContainer);
+			scene.add(this.debrisLightContainer);
+			for(var i =0; i<this.number; i++){
+				var debris  = new CreatDebris();
+				debris.mesh.index = i;
+				debris.mesh.position.set( path.getPointAt((i+1)/this.number - distance2Camera).x,path.getPointAt((i+1)/this.number - distance2Camera).y,path.getPointAt((i+1)/this.number - distance2Camera).z);
+				debris.light.position.copy(debris.mesh.position);
+				debris.light.position.z -= 2;
+				this.debrisContainer.add(debris.mesh);
+				this.debrisLightContainer.add(debris.light);
+			}
+			debrisContainer = this.debrisContainer;
+			debrisLightContainer = this.debrisLightContainer;
+			console.log(this.debrisContainer)
+		};
+
+		function CreatDebris(){
+			this.color = new THREE.Color("hsl(162, 95%, 57%)");
+			this.material = new THREE.MeshPhongMaterial({color: 0xdddddd, specular: this.color, shininess: 30,transparent: true});
+			var debris = new THREE.TetrahedronGeometry(1,0);
+			this.mesh = new THREE.Mesh(debris, this.material);
+			//碎片光
+			this.light = new THREE.PointLight(0x09eeee,2, 3);
+		}
+
+		//动画循环
+		var percentage = 0;
+		var step = 0;
+		function render(){
+			step += 0.02;
+			//碎片旋转起来
+			for(var i = 0; i<debrisContainer.children.length; i++){
+				debrisContainer.children[i].rotation.x = step;
+				debrisContainer.children[i].rotation.z = step;
+			}
+			
+			var p1 = path.getPointAt(percentage%1);
+			var p2 = path.getPointAt((percentage + 0.01)%1);
+			var p3 = path.getPointAt((percentage + 0.05)%1);
+			camera.position.set(p1.x,p1.y,p1.z);
+			camera.lookAt(p2);
+			tubeLight.position.set(p3.x, p3.y, p3.z);
+			  
+			//Render the scene
+			renderer.render(scene, camera);
+			requestAnimationFrame(render);
+
+			if(play){
+				percentage += 0.001;
+				/**遍历当前进度与各碎片所处进度点，
+				* 距离distance (5个碎片时0.06%合适)的时候静止，
+				*弹出数据层
+				*/
+				
+				for(var i=0; i<debrisNums; i++){
+					if(formatDecimal(percentage,3) == formatDecimal((i+1)/debrisNums - 0.07,3)){
+						console.log(formatDecimal(percentage,3))
+						play = false;
+						document.getElementById('btn').innerHTML = '继续探索';
+						document.getElementById('btn').setAttribute('level',i+1);
+						v3ToV2(debrisContainer.children[0]);
+						document.getElementById('dom_con').className = 'on';
+					}
+				}
+		
+				//跑到尽头后关灯并停止，按钮文字提示重新探索
+				if(percentage%1 >=0.999){
+					console.log(percentage)
+					tubeLight.color={r:0,g:0,b:0};
+					play = false;
+					document.getElementById('btn').innerHTML = '重新探索';
+					document.getElementById('btn').setAttribute('ended','true');
+				}
+			}
+		}
+		requestAnimationFrame(render);
+
+		//按钮控制动画继续
+		document.getElementById('btn').addEventListener('click',onMouseDown,false);
+		document.getElementById('btn').addEventListener('touchstart',onMouseDown,false);
+		function onMouseDown(){
+			/*
+			*点击按钮，如果此时ended == true，走到了管道尽头，则需要从头开启动画。
+			*如果没有走到尽头，则直接play = true 继续即可
+			*/
+			if(document.getElementById('btn').getAttribute('ended')=='true'){
+				document.getElementById('btn').setAttribute('ended','false');
+				tubeLight.color={r:1,g:1,b:1};
+				percentage = 0;
+				play = true;
+
+			}else{
+				play = true;
+			}
+		};
+
+		function raycasterCheck(){
+			//声明raycaster和mouse变量
+			var raycaster = new THREE.Raycaster();
+			var mouse = new THREE.Vector2();
+			function onMouseMove( event ) {
+			//通过鼠标点击的位置计算出raycaster所需要的点的位置，以屏幕中心为原点，值的范围为-1到1.
+			    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			    // 通过鼠标点的位置和当前相机的矩阵计算出raycaster
+			    raycaster.setFromCamera( mouse, camera );
+			    // 获取raycaster直线和所有模型相交的数组集合
+			    var intersects = raycaster.intersectObjects( debrisContainer.children );
+			    //console.log(intersects);
+			    //如果只需要将第一个触发事件，那就数组的第一个模型改变即可
+			    for ( var i = 0; i < intersects.length; i++ ) {
+			       var index =  intersects[ i ].object.index;
+			       debrisLightContainer.children[index].color.set(0x00f2f2);
+			       // console.log(debrisLightContainer.children[index])
+			        TweenMax.to(debrisLightContainer.children[index], 1, {distance:3.3});
+			    };
+			    if(intersects.length == 0){
+			    	for ( var i = 0; i < debrisLightContainer.children.length; i++ ) {
+				       debrisLightContainer.children[i].color.set(0x09eeee);
+				       TweenMax.to(debrisLightContainer.children[i], 1, {distance:3});
+				    }
+			    }
+			}
+			window.addEventListener( 'mousemove', onMouseMove, false );
+		}
+
+		//世界坐标转屏幕坐标
+		function v3ToV2(mesh){
+			var vector3 = new THREE.Vector3( mesh.position.x, mesh.position.y, mesh.position.z );
+			var vector2 = vector3.project(camera);
+            resultCoordinate = {
+                x: Math.round(vector2.x * halfWidth + halfWidth),
+                y: Math.round(-vector2.y * halfHeight + halfHeight)
+            };
+            console.log(resultCoordinate)
+		}
+
+		//DOM操作
+		function domHandle(){
+
+		}
+
+		/*保留小数点指定位数，不四舍五入*/
+		function formatDecimal(num, decimal) {
+		  num = num.toString()
+		  let index = num.indexOf('.')
+		  if (index !== -1) {
+		    num = num.substring(0, decimal + index + 1)
+		  } else {
+		    num = num.substring(0)
+		  }
+		  return parseFloat(num).toFixed(decimal)
+		}
+
+
+
+	</script>
+	
+
+	</body>
+</html>

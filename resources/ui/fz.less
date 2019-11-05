@@ -1,0 +1,9 @@
+// out: ./fz.css, compress:true, sourceMap:false
+@fz:50px;
+.functionFz(@fz,@i:14) when(@i <= @fz){
+    .fz@{i} {
+        font-size:@i *1px;
+    }
+    .functionFz(@fz,(@i + 1));
+}
+.functionFz(@fz);

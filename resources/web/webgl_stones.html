@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js webgl</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="/resources/modules/webgl/three.js"></script>
+		<script src="/resources/modules/webgl/WebGL.js"></script>
+		<script src="/resources/modules/webgl/stats.min.js"></script>
+		<script src='/resources/modules/webgl/controls/OrbitControls.js'></script>
+		<script src="/resources/modules/webgl/perlin.js"></script>
+		<style>
+			body {
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<script>
+
+			if ( WEBGL.isWebGLAvailable() === false ) {
+				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+			}
+			var stonesData = [{
+				type:'IcosahedronGeometry',
+				radius:4,
+				x:-10,
+				y:5,
+				z:0,
+				color:0x333333,
+				wireframe:false,
+				verticesChange:true,
+				rotateXspeed:-0.002,
+				rotateYspeed:0,
+				rotateZspeed:0.002
+			},{
+				type:'IcosahedronGeometry',
+				radius:3,
+				x:-8,
+				y:6,
+				z:-8,
+				color:0x222222,
+				wireframe:false,
+				verticesChange:true,
+				rotateXspeed:0.005,
+				rotateYspeed:0,
+				rotateZspeed:0.005
+			},{
+				type:'IcosahedronGeometry',
+				radius:4,
+				x:13,
+				y:7,
+				z:0,
+				color:0x333333,
+				wireframe:false,
+				verticesChange:true,
+				rotateXspeed:0,
+				rotateYspeed:0.005,
+				rotateZspeed:0.005
+			},{
+				type:'IcosahedronGeometry',
+				radius:3,
+				x:6,
+				y:3,
+				z:-4,
+				color:0x666666,
+				wireframe:false,
+				verticesChange:false,
+				rotateXspeed:0.005,
+				rotateYspeed:0,
+				rotateZspeed:0.005
+			},{
+				type:'IcosahedronGeometry',
+				radius:2,
+				x:5,
+				y:-2,
+				z:-10,
+				color:0x000000,
+				wireframe:false,
+				verticesChange:false,
+				rotateXspeed:-0.005,
+				rotateYspeed:0,
+				rotateZspeed:-0.005
+			}]
+			
+			//定义全局变量
+			var scene, renderer, camera;
+			var WIDTH, HEIGHT;
+			var stonePool = [];
+
+			function creatScene(){
+				WIDTH = window.innerWidth;
+				HEIGHT = window.innerHeight;
+				scene = new THREE.Scene();
+				camera = new THREE.PerspectiveCamera(65, WIDTH/HEIGHT, 1, 1000);
+				camera.position.set(0,0,20)
+				renderer = new THREE.WebGLRenderer({ alpha: true, antialias:true });
+				renderer.setSize(WIDTH, HEIGHT);
+				document.body.appendChild(renderer.domElement);
+
+			}
+
+			// LIGHTS
+			var ambientLight, hemisphereLight, shadowLight;
+
+			function createLights() {
+			  hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9);
+			  ambientLight = new THREE.AmbientLight(0xdcdcdc, .5);
+			  shadowLight = new THREE.DirectionalLight(0xffffff, .9);
+			  shadowLight.position.set(150, 350, 350);
+			  shadowLight.castShadow = true;
+			  shadowLight.shadow.camera.left = -400;
+			  shadowLight.shadow.camera.right = 400;
+			  shadowLight.shadow.camera.top = 400;
+			  shadowLight.shadow.camera.bottom = -400;
+			  shadowLight.shadow.camera.near = 1;
+			  shadowLight.shadow.camera.far = 1000;
+			  shadowLight.shadow.mapSize.width = 2048;
+			  shadowLight.shadow.mapSize.height = 2048;
+
+			  scene.add(hemisphereLight);
+			  scene.add(shadowLight);
+			  scene.add(ambientLight);
+			}
+
+			function Stones(data){
+				if(data.type =='IcosahedronGeometry'){
+					var geom = new THREE.IcosahedronGeometry(data.radius,0);
+				}
+				var mat = new THREE.MeshPhongMaterial({
+				  	color:data.color,
+				    shininess:0,
+				    specular:0xffffff,
+				    flatShading:THREE.FlatShading,
+				    wireframe:data.wireframe
+				 });
+				this.mesh = new THREE.Mesh(geom,mat);
+			}
+
+			function GreatStones(){
+				for(var i = 0; i<stonesData.length; i++){
+					var stone = new Stones(stonesData[i]);
+				 	stonePool.push(stone);
+				 	console.log(stonePool)
+				 //顶点
+				 if(stonesData[i].verticesChange){
+				 	var _geometry = stonePool[i].mesh.geometry;
+					for (var j = 0, l =  _geometry.vertices.length; j < l; j++) {
+		         _geometry.vertices[j].x +=  -1 + Math.random()  * 2;
+		         _geometry.vertices[j].y +=  -1 + Math.random()  * 2;
+		         //_geometry.vertices[j].z +=  -1 + Math.random()  * 2;
+	   			}
+				 }
+				}	
+				//位置
+				if(stonePool.length){
+					for(var i = 0; i<stonePool.length; i++){
+						stonePool[i].mesh.position.x = stonesData[i].x;
+						stonePool[i].mesh.position.y = stonesData[i].y;
+						stonePool[i].mesh.position.z = stonesData[i].z;
+						stonePool[i].mesh.rotation.z = Math.random()*Math.PI*2;
+						scene.add(stonePool[i].mesh)
+					}
+				}
+			}
+
+			function stonesRotate(){
+				for(var i = 0; i<stonePool.length; i++){
+					stonePool[i].mesh.rotation.x += stonesData[i].rotateXspeed;
+					stonePool[i].mesh.rotation.y += stonesData[i].rotateYspeed;
+					stonePool[i].mesh.rotation.z +=  stonesData[i].rotateZspeed;
+				}
+			}
+
+			function init(){
+				creatScene();
+				createLights();
+				GreatStones();
+				loop();
+			}
+
+			function loop(){
+				renderer.render(scene, camera);
+				stonesRotate();
+				requestAnimationFrame(loop);
+			}
+			window.addEventListener('load',init, false);
+
+		</script>
+
+	</body>
+</html>

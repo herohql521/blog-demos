@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<title>首页</title>
+<meta content="" name="Keywords">
+<meta content="" name="Description">
+<meta name="robots" content="noarchive"><!--禁止搜素引擎抓取快照-->
+<link rel="icon" href="/resources/favicon.ico" >
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="design by www.jerei.com">
+<link href="/resources/ui/ui.css" rel="stylesheet">
+<link href="/resources/web/css/style.css" rel="stylesheet">
+<link href="/resources/web/css/responsive.css" rel="stylesheet">
+<!--[if lt IE 9]><script src="/resources/web/lib/H5shiv.js"></script><![endif]-->
+<style>
+	.main-grail{padding:0 200px; overflow:hidden;color:#fff;}
+	.left{background:#008cd7; width:200px; margin-left:-200px;}
+	.middle{background:#d73300; width:100%;}
+	.right{background:#00d7a7; width:200px; margin-right:-200px;}
+	.left,.middle,.right{float:left; height:300px;}
+
+	.main-grail2{padding:0 200px; overflow:hidden; color:#fff;min-width:600px;}
+	.left2{background:#008cd7; width:200px; margin-left:-100%; left:-200px; position:relative;}
+	.middle2{background:#d73300; width:100%;}
+	.right2{background:#00d7a7; width:200px; margin-right:-200px;}
+	.left2,.middle2,.right2{float:left; height:300px;}
+
+	.wing-left,.wing-middle,.wing-right{float:left; height:300px;color:#fff;}
+	.wing-left{background:#008cd7; width:200px; margin-left:-100%;}
+	.wing-middle{width:100%;}
+	.wing-middle .middle-inner{margin: 0 200px; height:300px;background:#d73300;}
+	.wing-right{background:#00d7a7; width:200px; margin-left:-200px;}
+	
+
+
+</style>
+</head>
+<body>
+	<h2 class="tc">圣杯布局-左中右</h2>
+	<div class="main-grail">
+		<div class="left">左侧内容</div>
+		<div class="middle">中间内容</div>
+		<div class="right">右侧内容</div>
+	</div>
+	<h2 class="tc">圣杯布局-中左右</h2>
+	<div class="main-grail2">
+		<div class="middle2">中间内容</div>
+		<div class="left2">左侧内容</div>
+		<div class="right2">右侧内容</div>
+	</div>
+
+	<h2 class="tc">双飞翼布局-中左右</h2>
+	<div class="wing-middle">
+		<div class="middle-inner">中间内容</div>
+	</div>
+	<div class="wing-left">左侧内容</div>
+	
+	<div class="wing-right">右侧内容</div>
+	
+
+
+<script src="/resources/modules/seajs/sea.js" id="seajsnode" ></script>
+<script src="/resources/web/seajs.config.js"></script>
+<script>
+var jrChannel='0#0';
+seajs.use('js/channel_content');
+</script>
+</body>
+</html>
