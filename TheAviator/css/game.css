@@ -141,7 +141,7 @@
 
 .message--replay {
 	font-size: 2vw;
-	bottom: 40vh;
+	bottom: 30vh;
 	display: none;
 	text-indent: 0.5em;
 	letter-spacing: 0.5em;
@@ -161,6 +161,19 @@
 	color: #d6483b;
 	white-space: nowrap;
 }
+.message--replay .tip{margin-bottom:5vh;}
+.ewm{
+	width: 50px;
+  padding: 6px;
+  background: #fff;
+  box-sizing: content-box;
+  text-align: center;
+  display: inline-block;
+  text-indent: 0px;
+}
+.ewm img{width:100%;}
+
+
 
 @-webkit-keyframes blinking {
 	0% { opacity: 1; }
