@@ -23,7 +23,7 @@ var ennemiesPool = [];
 var particlesPool = [];
 var particlesInUse = [];
 var musicPlay = false;
-var oceanSound, bomSound, energyAddSound, passSound;
+var oceanSound, bgmSound, bomSound, energyAddSound, passSound;
 function resetGame(){
   game = {speed:0,
           initSpeed:.00035,
@@ -156,6 +156,21 @@ function creatAudio(){
   var listener = new THREE.AudioListener();
   camera.add( listener );
 
+  //爆炸声
+  bgmSound = new THREE.Audio( listener );
+  scene.add( bgmSound );
+  var bomLoader = new THREE.AudioLoader();
+  bomLoader.load( 'audio/bgm.mp3', function( buffer ) {
+    bgmSound.setBuffer( buffer );
+    bgmSound.setLoop( true );
+    bgmSound.setVolume( 0.5 );
+  },function(xhr ){
+    console.log('bgmSound '+ (xhr.loaded / xhr.total * 100) + '% loaded' );
+  },function(err){
+    console.log( 'bgmSound error' );
+  });
+
+
   // create a global audio source
   oceanSound = new THREE.Audio( listener );
   // 添加一个音频对象到场景中
@@ -172,6 +187,7 @@ function creatAudio(){
       if(document.getElementById('music').classList[1]==undefined){
         document.getElementById('music').className += ' on';
         oceanSound.play();
+        bgmSound.play()
       }
     },false)
 
@@ -180,6 +196,9 @@ function creatAudio(){
   },function(err){
     console.log( 'oceanSound error' );
   });
+
+
+
 
   //爆炸声
   bomSound = new THREE.Audio( listener );
