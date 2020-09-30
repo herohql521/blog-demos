@@ -267,11 +267,13 @@ function handleTouchMove(event) {
     var tx = -1 + (event.touches[0].pageX / WIDTH)*2;
     var ty = 1 - (event.touches[0].pageY / HEIGHT)*2;
     mousePos = {x:tx, y:ty};
-    // if(!musicPlay){
-    //   oceanSound.play();
-    //   musicPlay = true;
-    //   document.getElementById('music').className += ' on';
-    // }
+    //声音不播放
+    if(!bgmSound.isPlaying){
+      bgmSound.play()
+    }
+    if(!oceanSound.isPlaying){
+      oceanSound.play()
+    }
     
 }
 
