@@ -41,7 +41,7 @@ function resetGame(){
 
           level:1,
           levelLastUpdate:0,
-          distanceForLevelUpdate:500,
+          distanceForLevelUpdate:1000,
 
           planeDefaultHeight:100,
           planeAmpHeight:80,
@@ -164,15 +164,18 @@ function creatAudio(){
     bgmSound.setBuffer( buffer );
     bgmSound.setLoop( true );
     bgmSound.setVolume( 0.5 );
-    document.addEventListener('touchstart',function(){
-      if(document.getElementById('music').classList[1]==undefined){
-        document.getElementById('music').className += ' on';
-        oceanSound.play();
-        bgmSound.play()
-      }
-    },false)
+
   },function(xhr ){
     console.log('bgmSound '+ (xhr.loaded / xhr.total * 100) + '% loaded' );
+    if( xhr.loaded / xhr.total == 1){
+      document.addEventListener('touchstart',function(){
+        if(document.getElementById('music').classList[1]==undefined){
+          document.getElementById('music').className += ' on';
+          oceanSound.play();
+          bgmSound.play()
+        }
+      },false)
+    }
   },function(err){
     console.log( 'bgmSound error' );
   });
