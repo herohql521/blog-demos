@@ -266,11 +266,9 @@ function handleTouchMove(event) {
     mousePos = {x:tx, y:ty};
     //声音不播放
     if(!bgmSound.isPlaying){
-      alert.log('bfbgm')
       bgmSound.play()
     }
     if(!oceanSound.isPlaying){
-      alert.log('bfoceam')
       oceanSound.play()
     }
     
