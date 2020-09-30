@@ -171,6 +171,7 @@ function creatAudio(){
         if(document.getElementById('music').classList[1]==undefined){
           document.getElementById('music').className += ' on';
           bgmSound.play()
+
         }
       },false)
     }
@@ -187,7 +188,7 @@ function creatAudio(){
     oceanSound.setBuffer( buffer );
     oceanSound.setLoop( true );
     oceanSound.setVolume( 0.5 );
-    oceanSound.autoplay = true;
+    oceanSound.play()
     
   },function(xhr ){
     console.log('oceanSound '+ (xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -258,13 +259,7 @@ function handleMouseMove(event) {
   var tx = -1 + (event.clientX / WIDTH)*2;
   var ty = 1 - (event.clientY / HEIGHT)*2;
   mousePos = {x:tx, y:ty};
-  //声音不播放
-  if(!bgmSound.isPlaying){
-    bgmSound.play()
-  }
-  if(!oceanSound.isPlaying){
-    oceanSound.play()
-  }
+ 
 }
 
 function handleTouchMove(event) {
@@ -272,13 +267,7 @@ function handleTouchMove(event) {
     var tx = -1 + (event.touches[0].pageX / WIDTH)*2;
     var ty = 1 - (event.touches[0].pageY / HEIGHT)*2;
     mousePos = {x:tx, y:ty};
-    //声音不播放
-    if(!bgmSound.isPlaying){
-      bgmSound.play()
-    }
-    if(!oceanSound.isPlaying){
-      oceanSound.play()
-    }
+    
     
 }
 
