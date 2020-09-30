@@ -156,33 +156,14 @@ function creatAudio(){
   var listener = new THREE.AudioListener();
   camera.add( listener );
 
-  //爆炸声
+  //bgm声
   bgmSound = new THREE.Audio( listener );
   scene.add( bgmSound );
-  var bomLoader = new THREE.AudioLoader();
-  bomLoader.load( 'audio/bgm.mp3', function( buffer ) {
+  var bgmLoader = new THREE.AudioLoader();
+  bgmLoader.load( 'audio/bgm.mp3', function( buffer ) {
     bgmSound.setBuffer( buffer );
     bgmSound.setLoop( true );
     bgmSound.setVolume( 0.5 );
-  },function(xhr ){
-    console.log('bgmSound '+ (xhr.loaded / xhr.total * 100) + '% loaded' );
-  },function(err){
-    console.log( 'bgmSound error' );
-  });
-
-
-  // create a global audio source
-  oceanSound = new THREE.Audio( listener );
-  // 添加一个音频对象到场景中
-  scene.add( oceanSound );
-
-  // load a sound and set it as the Audio object's buffer
-  var oceanLoader = new THREE.AudioLoader();
-  oceanLoader.load( 'audio/sea.mp3', function( buffer ) {
-    oceanSound.setBuffer( buffer );
-    oceanSound.setLoop( true );
-    oceanSound.setVolume( 0.5 );
-    oceanSound.autoplay = true;
     document.addEventListener('touchstart',function(){
       if(document.getElementById('music').classList[1]==undefined){
         document.getElementById('music').className += ' on';
@@ -190,7 +171,23 @@ function creatAudio(){
         bgmSound.play()
       }
     },false)
+  },function(xhr ){
+    console.log('bgmSound '+ (xhr.loaded / xhr.total * 100) + '% loaded' );
+  },function(err){
+    console.log( 'bgmSound error' );
+  });
 
+
+  //海浪声
+  oceanSound = new THREE.Audio( listener );
+  scene.add( oceanSound );
+  var oceanLoader = new THREE.AudioLoader();
+  oceanLoader.load( 'audio/sea.mp3', function( buffer ) {
+    oceanSound.setBuffer( buffer );
+    oceanSound.setLoop( true );
+    oceanSound.setVolume( 0.5 );
+    oceanSound.autoplay = true;
+    
   },function(xhr ){
     console.log('oceanSound '+ (xhr.loaded / xhr.total * 100) + '% loaded' );
   },function(err){
