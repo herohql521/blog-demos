@@ -22,7 +22,6 @@ var oldTime = new Date().getTime();
 var ennemiesPool = [];
 var particlesPool = [];
 var particlesInUse = [];
-var musicPlay = false;
 var oceanSound, bgmSound, bomSound, energyAddSound, passSound;
 function resetGame(){
   game = {speed:0,
@@ -1068,8 +1067,8 @@ function updatePlane(){
   airplane.mesh.position.y += (targetY-airplane.mesh.position.y)*deltaTime*game.planeMoveSensivity;
   airplane.mesh.position.x += (targetX-airplane.mesh.position.x)*deltaTime*game.planeMoveSensivity;
 
-  airplane.mesh.rotation.z = (targetY-airplane.mesh.position.y)*deltaTime*game.planeRotXSensivity;
-  airplane.mesh.rotation.x = (airplane.mesh.position.y-targetY)*deltaTime*game.planeRotZSensivity;
+  airplane.mesh.rotation.z = (targetY-airplane.mesh.position.y)*0.01
+  airplane.mesh.rotation.x = (airplane.mesh.position.y-targetY)*0.005;
   var targetCameraZ = normalize(game.planeSpeed, game.planeMinSpeed, game.planeMaxSpeed, game.cameraNearPos, game.cameraFarPos);
   // camera.fov = normalize(mousePos.x,-1,1,40, 80);
   camera.updateProjectionMatrix ()
