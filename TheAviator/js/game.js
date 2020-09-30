@@ -171,7 +171,6 @@ function creatAudio(){
       document.addEventListener('touchstart',function(){
         if(document.getElementById('music').classList[1]==undefined){
           document.getElementById('music').className += ' on';
-          oceanSound.play();
           bgmSound.play()
         }
       },false)
@@ -260,6 +259,13 @@ function handleMouseMove(event) {
   var tx = -1 + (event.clientX / WIDTH)*2;
   var ty = 1 - (event.clientY / HEIGHT)*2;
   mousePos = {x:tx, y:ty};
+  //声音不播放
+  if(!bgmSound.isPlaying){
+    bgmSound.play()
+  }
+  if(!oceanSound.isPlaying){
+    oceanSound.play()
+  }
 }
 
 function handleTouchMove(event) {
