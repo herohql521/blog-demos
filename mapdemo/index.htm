@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<meta content="" name="Keywords">
+<meta content="" name="Description">
+<title>demo</title>
+<meta name="format-detection" content="telephone=no">
+<link href="./css/style.css" rel="stylesheet" />
+<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=VkiBtnj0YWFvQ6GS7XoWeC5Qo7MODDrT"></script>
+<script>
+(function (win, doc) {
+var docEl = doc.documentElement,
+resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+setFontSize = function () {
+var clientWidth = docEl.clientWidth;
+if (!clientWidth) return;
+    docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+};
+if (!doc.addEventListener) return;
+win.addEventListener(resizeEvt, setFontSize, false);
+doc.addEventListener('DOMContentLoaded', setFontSize, false);
+if (/Android (\d+\.\d+)/.test(navigator.userAgent)) {
+        win.addEventListener(resizeEvt, function () {
+            clearTimeout(timer);
+            timer = setTimeout(setFontSize, 300);
+        }, false);
+        win.addEventListener("pageshow", function(e) {
+            if (e.persisted) {
+                clearTimeout(timer);
+                timer = setTimeout(setFontSize, 300);
+            }
+        }, false);
+        setFontSize();
+    } 
+})(window,document);
+</script>
+</head>
+<body>
+	<div id="mapBox" class="mapbox">
+        
+    </div>
+</body>
+<script src="js/jquery.js"></script>
+<script src="js/index.js"></script>
+</html>
