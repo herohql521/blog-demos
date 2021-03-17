@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title id="title">Hover</title>       
+        <!-- <link href="css/css.css" rel="stylesheet"> -->
+        <style>
+            /*@import url(http://fonts.googleapis.com/css?family=Righteous);*/
+            body {
+              width: 100%;
+              margin: 0;
+              overflow: hidden;
+              cursor: move;
+              background: black;
+              height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id='canvas'></canvas>
+ 
+        <script>
+            window.requestAnimFrame = (function() {
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    window.oRequestAnimationFrame ||
+                    window.msRequestAnimationFrame ||
+                    function(callback) {
+                        window.setTimeout(callback, 1000 / 60);
+                    };
+            }) ();
+ 
+            c = document.getElementById('canvas'),
+            $ = c.getContext('2d');
+ 
+            //设定画布的宽高
+            var w = c.width = window.innerWidth;
+            var h = c.height = window.innerHeight;
+ 
+            //喷射点坐标
+            sx = w / 2;
+            sy = h / 2;
+ 
+            //放置圆点对象的数组
+            var circles = [];
+ 
+            //鼠标的位置
+            var mouse = {
+                x: 0,
+                y: 0
+            };
+ 
+            //初始速度
+            var vel = 10;
+ 
+            //创建新的圆点并加入数组
+            function createCircle() {
+                circles.push({
+                    x: sx,
+                    y: sy,
+                    v: {
+                        x: vel * Math.random(),
+                        y: vel * Math.random()
+                    }
+                });
+            }
+ 
+            //清除画布内容
+            function clear() {
+                $.fillStyle = 'black';
+                $.fillRect(0,0,w,h);
+            }
+ 
+            //画圆点
+            function drawCircle() {
+                clear();
+ 
+                for (var i in circles) {
+                    if (circles[i].x < 5 || w - circles[i].x < 5) {
+                        circles[i].v.x *= -1;
+                        circles[i].v.y -= 1;
+                    }
+                    if (circles[i].y < 5 || h - circles[i].y < 5) {
+                        circles[i].v.y *= -1;
+                        circles[i].v.x -= 1;
+                    }
+ 
+                    circles[i].x += circles[i].v.x;
+                    circles[i].y += circles[i].v.y;
+ 
+                    $.fillStyle = 'red';
+                    $.beginPath();
+                    $.arc(circles[i].x, circles[i].y, 20, 0, Math.PI * 2, true);
+                    $.closePath();
+                    $.fill();
+                }
+            }
+ 
+            //设置动画的回调函数，使动画持续播放
+            function updateCanvas() {
+                requestAnimationFrame(updateCanvas),
+                drawCircle();
+            }
+ 
+            window.addEventListener('mousedown',createCircle);
+ 
+            //页面载入后自行产生一个圆点
+            createCircle();
+ 
+            //触发循环回调，动画即可持续进行
+            updateCanvas();
+        </script>
+    </body>
+</html>
