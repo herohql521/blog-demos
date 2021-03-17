@@ -31,7 +31,7 @@ DataObject.prototype.draw = function(){
 		}
 		ctx.font = "32px Verdana";
 		ctx.fillStyle = "rgba(0,0,0,"+ this.alpha/2 +")";
-		ctx.fillRect(0,0,WIDTH,WIDTH);
+		ctx.fillRect(0,0,WIDTH,HEIGHT);
 		ctx.fillStyle = "rgba(255,255,255,"+ this.alpha +")";
 		ctx.fillText("GAMEOVER",WIDTH*0.5, HEIGHT*0.5);
 	}
