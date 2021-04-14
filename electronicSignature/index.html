@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>电子签名</title>
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html,body,canvas{user-select:none; -webkit-user-select:none;}
+		body {
+	    width: 100%;
+	    margin: 0;
+	    overflow: hidden;
+	    position:relative; 
+	  }
+	  canvas{user-select:none;}
+	  .btn{width:50%; height:60px; line-height:60px; text-align:center; font-size:16px; background:#108ee9; color:#fff; position:absolute;  bottom:0; z-index:11;}
+	  .save{right:0;}
+	  .reset{left:0;}
+	  img{position:absolute; top:0; left:0; width:100%; height:auto; z-index:10;}
+	</style>
+	
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<div class="btn reset" id="reset">重写</div>
+	<div class="btn save" id="save">保存</div>
+	<script type="text/javascript">
+		var WIDTH = window.innerWidth;
+		var HEIGHT = window.innerHeight;
+		var can, ctx;
+		var isSigning = false;//是否在绘制中
+		var arrx = [];//动作横坐标
+		var arry = [];//动作纵坐标
+		var arrz = [];//标识按下到抬起的一个组合
+		var pen = new Image();
+		pen.src = 'pen.png';
+
+
+		function init(){
+			can = document.getElementById('canvas');
+  		ctx = can.getContext('2d');
+  		can.width = WIDTH;
+  		can.height = HEIGHT;
+			ctx.strokeStyle = '#000000';
+			ctx.LineWidth = 4;
+			ctx.LineCap = 'round';
+			ctx.LineJoin = 'round';
+		}
+
+		init()
+
+		function signStart(e){
+			isSigning = true;
+ 			arrz.push(0);
+			arrx.push(e.changedTouches[0].pageX);
+			arry.push(e.changedTouches[0].pageY);
+
+		}
+		function signMove(e){
+			if (isSigning) {
+			  arrz.push(1);
+			  arrx.push(event.changedTouches[0].pageX);
+			  arry.push(event.changedTouches[0].pageY);
+			  draw();
+			}
+		}
+
+		function draw(){
+			ctx.beginPath();
+			for (var i = 0; i < arrx.length; i++) {
+			  if (arrz[i] == 0) {
+			  ctx.moveTo(arrx[i], arry[i])
+			  } else {
+			  ctx.lineTo(arrx[i], arry[i])
+			  }
+			}
+			ctx.clearRect(0, 0, WIDTH, HEIGHT);
+			ctx.stroke();
+
+			//draw pen
+			ctx.drawImage(pen, arrx[arrx.length-1] -8, arry[arrx.length-1]-54 , 64, 64)
+			
+		}
+
+		function signEnd(){
+			isSigning = false;
+			ctx.clearRect(0, 0, WIDTH, HEIGHT);
+			ctx.stroke();
+		}
+
+		function reset(){
+			ctx.clearRect(0, 0, WIDTH, HEIGHT);
+			arrx = [];
+			arry = [];
+			arrz = [];
+			//删除img
+			[].forEach.call(document.getElementsByTagName('img'),function(e,i){
+				e.remove()
+			})
+		}
+
+		function toImg(){
+			var imgBase64 = can.toDataURL("image/png");
+			console.log(imgBase64)
+
+			var img = document.createElement("img");
+      img.setAttribute("crossOrigin",'Anonymous')
+      img.src = imgBase64;
+      document.body.appendChild(img)
+      alert('长按图片保存到相册')
+
+		}
+		can.addEventListener('touchstart',signStart)
+		can.addEventListener('touchmove',signMove)
+		can.addEventListener('touchend',signEnd)
+		document.getElementById('save').addEventListener('click',toImg);
+		document.getElementById('reset').addEventListener('click',reset);
+	</script>
+</body>
+</html>
