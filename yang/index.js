@@ -27,8 +27,8 @@ function game(){
 
 function init(){
   var num_layer1 = 25;
-  var num_layer2 = 2;
-  var num_layer3 = 2;
+  var num_layer2 = 15;
+  var num_layer3 = 10;
   initLayer1(num_layer1)
   layerArr2 = randomArr(layerArr1,num_layer2,2)
   layerArr3 = randomArr(layerArr2,num_layer3,3)
